@@ -1,0 +1,26 @@
+{
+  "name": "brevity-client",
+  "version": "0.0.1",
+  "description": "Electron-based client for an unfinished modern and minimalistic cloud notes app.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaciejkaG/brevity-client.git"
+  },
+  "author": "Maciejka",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/MaciejkaG/brevity-client/issues"
+  },
+  "homepage": "https://github.com/MaciejkaG/brevity-client#readme",
+  "devDependencies": {
+    "electron": "32.0.1",
+    "@eslint/js": "^9.9.1",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0"
+  }
+}

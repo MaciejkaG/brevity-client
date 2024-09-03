@@ -1,0 +1,115 @@
+:root {
+    --theme-1: rgb(10, 10, 23);
+    --theme-2: rgb(17, 17, 41);
+    --navbar-background: rgb(18, 18, 36);
+
+    --navbar-width: 4rem;
+
+    font-size: 18px;
+}
+
+body {
+    margin: 0;
+    background-color: var(--theme-1);
+    color: white;
+
+    font-family: 'SUSE', sans-serif;
+
+    overflow: hidden;
+}
+
+nav {
+    background-color: var(--navbar-background);
+
+    position: absolute;
+    width: 4rem;
+    height: 100vh;
+    top: 0;
+    left: 0;
+
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+
+    transition: width .6s;
+
+    z-index: 200;
+}
+
+nav:hover {
+    width: 30%;
+}
+
+nav:hover~.editor {
+    /* filter: blur(10px); */
+    transform: scale(0.7) translateX(18.5%) translateY(-16.5%);
+    height: 130vh;
+    background-color: var(--theme-2);
+}
+
+.editor {
+    position: absolute;
+    width: calc(100vw - var(--navbar-width));
+    height: 100vh;
+    top: 0;
+    left: var(--navbar-width);
+
+    outline: none;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow: scroll;
+    white-space: nowrap;
+
+    transition: all .6s;
+
+    z-index: 100;
+}
+
+.editor::-webkit-scrollbar {
+    display: none;
+}
+
+.titleBar {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    padding: 0 .5rem;
+    gap: 1rem;
+    box-sizing: border-box;
+    left: 0;
+    top: -30px;
+    height: 30px;
+    width: 100%;
+    background: rgba(255, 255, 255, .1);
+    backdrop-filter: blur(10px);
+
+    transition: top .15s ease-out;
+
+    -webkit-app-region: drag;
+    z-index: 999;
+}
+
+.titleBar.active {
+    top: 0;
+}
+
+.titleBar .separator {
+    margin-left: auto;
+}
+
+.titleBar .trafficLight {
+    width: 12px;
+    aspect-ratio: 1;
+    border-radius: 100%;
+}
+
+.trafficLight.close {
+    background-color: #FF605C;
+}
+
+.trafficLight.minimise {
+    background-color: #FFBD44;
+}
+
+.trafficLight.maximise {
+    background-color: #00CA4E;
+}
