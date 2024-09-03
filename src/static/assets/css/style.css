@@ -1,10 +1,10 @@
 :root {
     --theme-1: rgb(10, 10, 23);
-    --theme-2: rgb(17, 17, 41);
+    --theme-2: rgb(12, 12, 28);
     --navbar-background: rgb(18, 18, 36);
 
     --navbar-width: 4rem;
-    --navbar-expanded-width: 30%;
+    --navbar-expanded-width: 40%;
 
     font-size: 18px;
 }
@@ -42,6 +42,7 @@ nav:hover {
     left: var(--navbar-width);
     outline: none;
     padding: 1rem;
+    border-radius: 10px;
     box-sizing: border-box;
     overflow: auto;
     transition: all .6s;
@@ -54,9 +55,7 @@ nav:hover {
 }
 
 nav:hover~#editor {
-    /* Remove the previous transform and height adjustments */
-    /* transition: none; */
-    background-color: red;
+    background-color: var(--theme-2);
 }
 
 .titleBar {
