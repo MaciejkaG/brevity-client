@@ -21,9 +21,52 @@
     </div>
 
     <nav></nav>
-    <div class="editor" contenteditable="true">
+    <div id="editor" contenteditable>
     
     </div>
+
+    <script>
+        $(document).ready(function () {
+                $('nav').hover(function () {
+                    let editor = document.querySelector('#editor');
+
+                    // Calculate the dimensions to fit the content
+                    let contentWidth = editor.scrollWidth + 18;
+                    let contentHeight = editor.scrollHeight;
+
+                    // Calculate the scaling factor to fit the editor within the available space
+                    let windowWidth = $(window).width();
+                    let sidebarWidth = windowWidth * 0.3; // 30% of the window width
+                    let availableWidth = windowWidth - sidebarWidth;
+
+                    // Determine scale factor to fit the content within the available space
+                    console.log(availableWidth / contentWidth, window.innerHeight / contentHeight)
+                    let scale = Math.floor((Math.min(availableWidth / contentWidth, window.innerHeight / contentHeight) - .1) * 1000) / 1000;
+
+                    console.log(scale);
+
+                    // Center the editor in the available space
+                    let newLeft = sidebarWidth + (availableWidth - contentWidth * scale) / 2;
+                    let newTop = (window.innerHeight - contentHeight * scale) / 2;
+
+                    console.log(`translate(${50 * scale}%, ${-50 * scale}%)`)
+
+                    $('#editor').css({ 
+                        width: `${contentWidth}px`,
+                        height: `${contentHeight}px`,
+                        scale: scale,
+                        left: newLeft + 'px',
+                        top: newTop + 'px',
+                        transform: `translate(-50%, -50%)`
+                    });
+
+                }, function () {
+                    // Revert to the original size and position
+
+                    $('#editor').removeAttr('style');
+                });
+            });
+    </script>
 
     <script src="./assets/js/titleBar.js"></script>
 </body>

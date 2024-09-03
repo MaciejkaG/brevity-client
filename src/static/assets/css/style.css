@@ -4,6 +4,7 @@
     --navbar-background: rgb(18, 18, 36);
 
     --navbar-width: 4rem;
+    --navbar-expanded-width: 30%;
 
     font-size: 18px;
 }
@@ -12,60 +13,50 @@ body {
     margin: 0;
     background-color: var(--theme-1);
     color: white;
-
     font-family: 'SUSE', sans-serif;
-
     overflow: hidden;
 }
 
 nav {
     background-color: var(--navbar-background);
-
     position: absolute;
-    width: 4rem;
+    width: var(--navbar-width);
     height: 100vh;
     top: 0;
     left: 0;
-
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
-
     transition: width .6s;
-
     z-index: 200;
 }
 
 nav:hover {
-    width: 30%;
+    width: var(--navbar-expanded-width);
 }
 
-nav:hover~.editor {
-    /* filter: blur(10px); */
-    transform: scale(0.7) translateX(18.5%) translateY(-16.5%);
-    height: 130vh;
-    background-color: var(--theme-2);
-}
-
-.editor {
+#editor {
     position: absolute;
     width: calc(100vw - var(--navbar-width));
     height: 100vh;
     top: 0;
     left: var(--navbar-width);
-
     outline: none;
     padding: 1rem;
     box-sizing: border-box;
-    overflow: scroll;
-    white-space: nowrap;
-
+    overflow: auto;
     transition: all .6s;
-
     z-index: 100;
+    white-space: nowrap;
 }
 
-.editor::-webkit-scrollbar {
+#editor::-webkit-scrollbar {
     display: none;
+}
+
+nav:hover~#editor {
+    /* Remove the previous transform and height adjustments */
+    /* transition: none; */
+    background-color: red;
 }
 
 .titleBar {
