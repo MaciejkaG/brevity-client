@@ -11,7 +11,7 @@
 
 body {
     margin: 0;
-    background-color: var(--theme-1);
+    background-color: var(--theme-2);
     color: white;
     font-family: 'SUSE', sans-serif;
     overflow: hidden;
@@ -69,6 +69,7 @@ nav.active {
 }
 
 #editor {
+    white-space: pre;
     background-color: var(--theme-1);
     font-family: 'Open Sans', sans-serif;
     position: absolute;
@@ -133,7 +134,7 @@ nav.active {
 }
 
 nav.active~#editor {
-    background-color: var(--theme-2);
+    /* background-color: var(--theme-2); */
     cursor: pointer;
 }
 
