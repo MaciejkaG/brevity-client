@@ -1,6 +1,7 @@
 let sidebarActive = false;
 
 $(document).ready(function () {
+    // Handle sidebar expanding and all animations including the note preview.
     $('nav').hover(function () {
         if (sidebarActive) return;
 
@@ -46,13 +47,14 @@ $(document).ready(function () {
         $("#editor").blur();
 
         // Position the note title
-        $('.editorTitle').css({
+        $('#noteTitle').css({
             top: `${titleTop}px`,
         });
 
         sidebarActive = true;
     });
 
+    // Handle sidebar collapsing
     $('#editor').on('click', function () {
         if (!sidebarActive) return;
 
@@ -66,4 +68,15 @@ $(document).ready(function () {
 
         sidebarActive = false;
     })
+});
+
+// Select the current note title's contents when it's focused (clicked)
+$('#noteTitle').on('focus', function () {
+    const el = this;
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.selectNodeContents(el);
+    selection.removeAllRanges();  // Clear any existing selections
+    selection.addRange(range);    // Add the new range to the selection
 });
