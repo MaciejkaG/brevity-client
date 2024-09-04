@@ -1,6 +1,14 @@
+let sidebarActive = false;
+
 $(document).ready(function () {
     $('nav').hover(function () {
+        if (sidebarActive) return;
+
+        // Expand the sidebar by adding the active CSS class
+        $('nav').addClass('active');
+
         let editor = document.querySelector('#editor');
+        const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
 
         // Calculate the dimensions to fit the content
         let contentWidth = editor.scrollWidth + 18; // Add padding
@@ -10,13 +18,18 @@ $(document).ready(function () {
         let windowWidth = $(window).width();
         let sidebarWidth = windowWidth * 0.4; // 40% of the window width
         let availableWidth = windowWidth - sidebarWidth;
+        // Subtract the approximate note title height from the height of the window
+        let availableHeight = window.innerHeight;
 
         // Determine scale factor to fit the content within the available space
-        let scale = Math.floor((Math.min(availableWidth / contentWidth, window.innerHeight / contentHeight) - .1) * 1000) / 1000;
+        let scale = Math.min((availableWidth - 5 * rem) / contentWidth, (availableHeight - 10 * rem) / contentHeight);
 
         // Calculate the new positions to center the editor
         let newLeft = sidebarWidth + (availableWidth - contentWidth * scale) / 2;
-        let newTop = (window.innerHeight - contentHeight * scale) / 2;
+        let newTop = (availableHeight - contentHeight * scale) / 2;
+
+        // Calculate the scaled position for the title
+        let titleTop = newTop - 5 * rem;
 
         // Apply the CSS to the editor
         $('#editor').css({
@@ -29,8 +42,28 @@ $(document).ready(function () {
             top: 0
         });
 
-    }, function () {
+        // Remove focus from the editor
+        $("#editor").blur();
+
+        // Position the note title
+        $('.editorTitle').css({
+            top: `${titleTop}px`,
+        });
+
+        sidebarActive = true;
+    });
+
+    $('#editor').on('click', function () {
+        if (!sidebarActive) return;
+
+        // Set sidebar back to default styling by removing the active CSS class
+        $('nav').removeClass('active');
+
         // Revert to the original size and position
         $('#editor').removeAttr('style');
-    });
+        // Apply the focus back to the editor
+        $("#editor").focus();
+
+        sidebarActive = false;
+    })
 });

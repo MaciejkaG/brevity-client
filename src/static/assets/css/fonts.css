@@ -1,13 +1,38 @@
+/* Main UI text font */
 @font-face {
     font-family: 'SUSE';
     src: url('../fonts/SUSE/SUSE-VariableFont_wght.ttf') format('truetype');
-    font-weight: 400, 700;
+    font-weight: 300, 700;
     font-style: normal, italic;
 }
 
+/* Main display font */
 @font-face {
-    font-family: 'IBM Plex Mono';
-    src: url('../fonts/IBM_Plex_Mono/IBMPlexMono-Regular.ttf') format('truetype');
-    font-weight: 400;
+    font-family: 'Alkatra';
+    src: url('../fonts/Alkatra/Alkatra-VariableFont_wght.ttf') format('truetype');
+    font-weight: 500, 700;
+    font-style: normal, italic;
+}
+
+/* Main editor text font */
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../fonts/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf') format('truetype');
+    font-weight: 300, 700;
+    font-style: normal, italic;
+}
+
+/* Main code/monospace font */
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300;
     font-style: normal;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('../fonts/JetBrains_Mono/JetBrainsMono-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
 }

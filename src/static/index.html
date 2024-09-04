@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note Editor</title>
 
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
     <link rel="stylesheet" href="./assets/css/fonts.css">
     <link rel="stylesheet" href="./assets/css/style.css">
 
@@ -15,16 +18,33 @@
     <div class="titleBar">
         <span>Brevity</span>
         <div class="separator"></div>
-        <div class="trafficLight close"></div>
-        <div class="trafficLight minimise"></div>
-        <div class="trafficLight maximise"></div>
+        <div class="trafficLight close" id="close"></div>
+        <div class="trafficLight minimise" id="minimise"></div>
+        <div class="trafficLight maximise" id="maximise"></div>
     </div>
 
-    <nav></nav>
+    <nav>
+        <div class="el">
+            <span class="material-symbols-outlined icon-sidebar">
+                cloud_off
+            </span>
+            <span>Pliki lokalne</span>
+        </div>
+        <div class="el">
+            <span class="material-symbols-outlined icon-sidebar">
+                cloud
+            </span>
+            <span>Pliki w chmurze</span>
+        </div>
+        <div class="separator"></div>
+    </nav>
     <div id="editor" contenteditable>
     
     </div>
+    <h1 class="editorTitle" contenteditable>Tytuł notatki</h1>
 
+
+    <script src="./assets/js/renderer.js"></script>
     <script src="./assets/js/titleBar.js"></script>
     <script src="./assets/js/sideBar.js"></script>
 </body>
