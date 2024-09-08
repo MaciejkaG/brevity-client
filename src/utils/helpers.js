@@ -1,4 +1,5 @@
-const { ipcMain } = require('electron');
+const { ipcMain, BrowserWindow } = require('electron');
+const path = require('node:path');
 
 const localFiles = require('./local-files.js');
 const parser = require('./parser.js');
@@ -25,10 +26,30 @@ module.exports = {
         });
     },
 
-    handleRequests: () => {
+    handleRequests: (app, mainWindow) => {
         // Handle note list request.
         ipcMain.handle('note-list', () => {
             const notes = localFiles.getNotes();
+
+            if (notes === null) { // If "Documents" directory couldn't be reached
+                mainWindow.close();
+
+                // Create the document directory choosing dialogue menu.
+                const dialogueWindow = new BrowserWindow({
+                    width: 800,
+                    height: 250,
+                    resizable: false,
+                    autoHideMenuBar: true,
+                    webPreferences: {
+                        preload: path.join(__dirname, '../preloads/main.js'),
+                        enableRemoteModule: false,
+                    },
+                });
+
+                // and load the index.html of the app.
+                dialogueWindow.loadFile(path.join(__dirname, '../static/documents-folder-missing-dialogue.html'));
+            }
+
             return notes;
         });
 

@@ -1,0 +1,36 @@
+body {
+    text-align: center;
+    padding: 1rem;
+}
+
+h1 {
+    font-size: 1.8rem;
+}
+
+.buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 10px;
+    width: 15rem;
+    font-family: 'SUSE', sans-serif;
+    font-size: 1rem;
+    color: white;
+    background-color: var(--theme-3);
+    outline: solid 2px rgba(255, 255, 255, 0);
+    outline-offset: 10px;
+    cursor: pointer;
+    opacity: 0;
+
+    transition: outline 0.3s, outline-offset 0.3s;
+}
+
+button:hover {
+    outline: solid 2px rgb(255, 255, 255);
+    outline-offset: 4px;
+}

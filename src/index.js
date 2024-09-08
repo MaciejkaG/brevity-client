@@ -14,8 +14,7 @@ const createWindow = () => {
         frame: false,
         titleBarStyle: 'hidden',
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-            contextIsolation: true,
+            preload: path.join(__dirname, 'preloads/main.js'),
             enableRemoteModule: false,
         },
     });
@@ -23,7 +22,7 @@ const createWindow = () => {
     // Setup the traffic lights for the window (close/minimise/maximise buttons)
     h.setupTrafficLights(app, mainWindow);
     // Setup handlers for requests like the note list etc.
-    h.handleRequests();
+    h.handleRequests(app, mainWindow);
 
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, 'static/index.html'));
@@ -48,6 +47,6 @@ app.whenReady().then(() => {
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit();
-});
+// app.on('window-all-closed', () => {
+//     if (process.platform !== 'darwin') app.quit();
+// });

@@ -8,6 +8,10 @@ module.exports = {
     getNotes: () => {
         const documentsDir = getDocumentsDir();
 
+        if (documentsDir === null) {
+            return null;
+        }
+
         const notes = [];
 
         // Read and list contents of the Documents directory
@@ -35,7 +39,15 @@ function getDocumentsDir() {
 
     // Check if the notes' directory exists, if not create it.
     if (!fs.existsSync(documentsDir)) {
-        fs.mkdirSync(documentsDir);
+        try {
+            fs.mkdirSync(documentsDir);
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                return null;
+            }
+
+            throw err;
+        }
     }
 
     return documentsDir;
