@@ -81,13 +81,22 @@ $('#noteTitle').on('focus', function () {
     selection.addRange(range);    // Add the new range to the selection
 });
 
-$("#noteTitle").keypress(function (e) { return e.which != 13; });
+$('#noteTitle').keypress(function (e) {
+    if (e.which === 13) { // When enter is pressed
+        // Unfocus the title field
+        $('#noteTitle').blur();
+        // Update the title in origin here.
+        return false;
+    }
+});
 
 async function openEditorFile(path) {
     const file = await getFile(path);
 
     // Insert the raw HTML content directly into the #editor div
     $('#editor').html(file.html);
+    // Set the title field of the note
+    $('#noteTitle').html(file.title);
 
     // Function to wrap text nodes with spans for animation
     function wrapTextWithSpans(element) {
