@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/MaciejkaG/brevity-client#readme",
   "devDependencies": {
-    "electron": "32.0.1",
     "@eslint/js": "^9.9.1",
+    "electron": "32.0.1",
     "eslint": "^9.9.1",
     "globals": "^15.9.0"
+  },
+  "dependencies": {
+    "color-string": "^1.9.1"
   }
 }

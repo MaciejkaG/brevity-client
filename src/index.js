@@ -1,7 +1,7 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain , remote} = require('electron');
+const { app, BrowserWindow} = require('electron');
 const path = require('node:path');
 const h = require('./utils/helpers.js');
 
@@ -20,14 +20,16 @@ const createWindow = () => {
         },
     });
 
+    // Setup the traffic lights for the window (close/minimise/maximise buttons)
+    h.setupTrafficLights(app, mainWindow);
+    // Setup handlers for requests like the note list etc.
+    h.handleRequests();
+
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, 'static/index.html'));
 
     // Open the DevTools.
     // mainWindow.webContents.openDevTools()
-
-    // Setup the traffic lights for the window (close/minimise/maximise buttons)
-    h.setupTrafficLights(app, mainWindow);
 }
 
 // This method will be called when Electron has finished
@@ -49,6 +51,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

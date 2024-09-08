@@ -2,6 +2,9 @@
     --theme-1: rgb(10, 10, 23);
     --theme-2: rgb(12, 12, 28);
     --navbar-background: rgb(18, 18, 36);
+    --alt: rgb(85, 85, 145);
+
+    --success: #68e76e;
 
     --navbar-width: 4rem;
     --navbar-expanded-width: 40%;
@@ -28,44 +31,72 @@ nav {
     box-sizing: border-box;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
-    transition: width .6s;
+    transition: width .6s, transform .6s;
     z-index: 200;
 
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    gap: 1px;
+    user-select: none;
 
     text-wrap: nowrap;
     overflow: hidden;
 }
 
-nav .el {
+nav .collapsed {
+    min-width: var(--navbar-width);
+    cursor: pointer;
+}
+
+nav .expanded, nav .collapsed {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+nav .expanded .el, nav .collapsed .el {
     display: flex;
     align-items: center;
-    gap: 1px;
-
-    /* padding: 1rem 0; */
 
     font-size: 1.2rem;
 }
 
-nav .el *:first-child {
+nav .collapsed .el {
+    justify-content: center;
+}
+
+nav .expanded .el *:first-child {
     display: flex;
     justify-content: center;
     align-items: center;
     width: var(--navbar-width);
 }
 
-nav .el *:last-child {
+nav .expanded .el *:last-child {
     width: calc(var(--navbar-expanded-width) - var(--navbar-width));
 }
 
-nav .el .icon-sidebar {
+nav .expanded .el .icon-sidebar, nav .collapsed .el .icon-sidebar {
     font-size: 1.6rem;
 }
 
+nav .expanded .list {
+    font-size: 0.9rem;
+    margin-left: 2rem;
+    border-left: 2px solid var(--alt);
+    padding: .5rem 0;
+    padding-left: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+}
+
+nav .expanded .list span {
+    cursor: pointer;
+}
+
 nav.active {
-    width: var(--navbar-expanded-width);
+    width: calc(var(--navbar-expanded-width) + var(--navbar-width));
+    transform: translateX(calc(var(--navbar-width) * -1));
 }
 
 #editor {
@@ -101,14 +132,23 @@ nav.active {
 
 /* Handle */
 #editor::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, .2);
     border-radius: 10px;
-    transition: background 0.3s;
+    transition: background .3s;
 }
 
 /* Handle on hover */
 #editor::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, .6);
+}
+
+@keyframes divAppearAnimation {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#editor div {
+    animation: 1 0.6s divAppearAnimation;
 }
 
 #noteTitle {
@@ -124,7 +164,7 @@ nav.active {
 
     z-index: 50;
     opacity: 0;
-    transition: opacity 0.6s, border-bottom 0.3s;
+    transition: opacity .6s, border-bottom .3s;
     outline: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0);
 }
@@ -191,4 +231,8 @@ nav.active~#noteTitle {
 
 .trafficLight.maximise {
     background-color: #00CA4E;
+}
+
+#cloudStatus {
+    color: var(--success);
 }

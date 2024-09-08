@@ -2,7 +2,7 @@ let sidebarActive = false;
 
 $(document).ready(function () {
     // Handle sidebar expanding and all animations including the note preview.
-    $('nav').hover(function () {
+    $('nav .collapsed').on('click', function () {
         if (sidebarActive) return;
 
         // Expand the sidebar by adding the active CSS class
@@ -67,7 +67,7 @@ $(document).ready(function () {
         $("#editor").focus();
 
         sidebarActive = false;
-    })
+    });
 });
 
 // Select the current note title's contents when it's focused (clicked)
@@ -80,3 +80,11 @@ $('#noteTitle').on('focus', function () {
     selection.removeAllRanges();  // Clear any existing selections
     selection.addRange(range);    // Add the new range to the selection
 });
+
+async function openEditorFile(path) {
+    const file = await getFile(path);
+    $('#editor').html(file.html);
+    $('#noteTitle').html(file.title);
+
+    $("#editor").click();
+}
