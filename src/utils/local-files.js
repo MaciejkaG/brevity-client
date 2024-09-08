@@ -1,41 +1,43 @@
-const path = require('node:path');
-const fs = require('node:fs');
-const os = require('node:os');
+import path from 'node:path';
+import fs from 'node:fs';
+import os from 'node:os';
+import Store from 'electron-store';
 
-const parser = require('./parser.js');
+// Initiate the electron-store
+const store = new Store();
 
-module.exports = {
-    getNotes: () => {
-        const documentsDir = getDocumentsDir();
+import * as parser from './parser.js';
 
-        if (documentsDir === null) {
-            return null;
-        }
+export function getNotes() {
+    const documentsDir = getDocumentsDir();
 
-        const notes = [];
-
-        // Read and list contents of the Documents directory
-        const files = fs.readdirSync(documentsDir);
-
-        files.forEach(file => {
-            const fileAbsolutePath = path.join(documentsDir, file);
-
-            // If the path is a file and has the .brev extension.
-            if (fs.lstatSync(fileAbsolutePath).isFile() && file.endsWith('.brev')) {
-                const title = parser.brevToHTML(fileAbsolutePath).title;
-                notes.push({ title, path: fileAbsolutePath });
-            }
-        });
-
-        return notes;
+    if (documentsDir === null) {
+        return null;
     }
-};
+
+    const notes = [];
+
+    // Read and list contents of the Documents directory
+    const files = fs.readdirSync(documentsDir);
+
+    files.forEach(file => {
+        const fileAbsolutePath = path.join(documentsDir, file);
+
+        // If the path is a file and has the .brev extension.
+        if (fs.lstatSync(fileAbsolutePath).isFile() && file.endsWith('.brev')) {
+            const title = parser.brevToHTML(fileAbsolutePath).title;
+            notes.push({ title, path: fileAbsolutePath });
+        }
+    });
+
+    return notes;
+}
 
 // console.log(module.exports.getNoteTitles());
 
 function getDocumentsDir() {
     // Determine the place to store Brevity files
-    const documentsDir = path.join(os.homedir(), 'Documents/Brevity');
+    const documentsDir = store.get('documentsDir') ? store.get('documentsDir') : path.join(os.homedir(), 'Documents/Brevity');
 
     // Check if the notes' directory exists, if not create it.
     if (!fs.existsSync(documentsDir)) {
@@ -50,5 +52,29 @@ function getDocumentsDir() {
         }
     }
 
+    store.set('documentsDir', documentsDir);
+
     return documentsDir;
+}
+
+export function setDocumentsDir(dir) {
+    // Determine the place to store Brevity files in the documents directory
+    const documentsDir = path.join(dir, 'Brevity');
+
+    // Check if the notes' directory exists, if not create it.
+    if (!fs.existsSync(documentsDir)) {
+        try {
+            fs.mkdirSync(documentsDir);
+        } catch (err) {
+            if (err.code === 'ENOENT') {
+                return false;
+            }
+
+            throw err;
+        }
+    }
+
+    store.set('documentsDir', documentsDir);
+
+    return true;
 }

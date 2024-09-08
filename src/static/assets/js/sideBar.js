@@ -81,10 +81,42 @@ $('#noteTitle').on('focus', function () {
     selection.addRange(range);    // Add the new range to the selection
 });
 
+$("#noteTitle").keypress(function (e) { return e.which != 13; });
+
 async function openEditorFile(path) {
     const file = await getFile(path);
-    $('#editor').html(file.html);
-    $('#noteTitle').html(file.title);
 
+    // Insert the raw HTML content directly into the #editor div
+    $('#editor').html(file.html);
+
+    // Function to wrap text nodes with spans for animation
+    function wrapTextWithSpans(element) {
+        element.contents().each(function () {
+            if (this.nodeType === Node.TEXT_NODE) {
+                const text = this.nodeValue;
+                const wrappedText = text.split('').map(char => {
+                    // Handle spaces separately to avoid collapsing them
+                    return char === ' ' ? '&nbsp;' : `<span style="opacity: 0; display: inline-block;">${char}</span>`;
+                }).join('');
+                $(this).replaceWith(wrappedText);
+            } else {
+                wrapTextWithSpans($(this)); // Recursively wrap child elements
+            }
+        });
+    }
+
+    // Wrap text inside #editor
+    wrapTextWithSpans($('#editor'));
+
+    // Animate each letter's opacity
+    anime({
+        targets: '#editor span',
+        opacity: [0, 1],          // Fade in from 0 to 1
+        easing: 'easeInOutQuad',  // Smooth easing
+        duration: 400,            // Total duration
+        delay: anime.stagger(3),  // Delay between each letter
+    });
+
+    // Trigger a click on the editor to put focus on it.
     $("#editor").click();
 }

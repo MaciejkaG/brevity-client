@@ -84,7 +84,6 @@ nav.active {
 }
 
 #editor {
-    white-space: pre;
     background-color: var(--theme-1);
     font-family: 'Open Sans', sans-serif;
     position: absolute;
@@ -97,10 +96,13 @@ nav.active {
     padding-top: 1.5rem;
     border-radius: 10px;
     box-sizing: border-box;
-    overflow: auto;
+
+    overflow-y: auto;
     transition: all .6s;
     z-index: 100;
-    white-space: nowrap;
+
+    /* Uncomment to prevent text from wrapping and enable horizontal scrolling instead */
+    /* white-space: pre; */
 }
 
 /* Size */
@@ -133,6 +135,7 @@ nav.active {
 
 #editor div {
     animation: 1 0.6s divAppearAnimation;
+    margin-bottom: 1rem;
 }
 
 #noteTitle {

@@ -1,9 +1,11 @@
 // main.js
 
+const __dirname = import.meta.dirname;
+
 // Modules to control application life and create native browser window
-const { app, BrowserWindow} = require('electron');
-const path = require('node:path');
-const h = require('./utils/helpers.js');
+import { app, BrowserWindow } from 'electron';
+import path from'node:path';
+import * as h from './utils/helpers.js';
 
 const createWindow = () => {
     // Create the browser window.
