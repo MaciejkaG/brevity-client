@@ -91,6 +91,8 @@ $('#noteTitle').keypress(function (e) {
         // Update the title in origin here.
         return false;
     }
+
+    if ($('#noteTitle').innerText())
 });
 
 async function openEditorLocalFile(path) {
@@ -134,4 +136,20 @@ async function openEditorLocalFile(path) {
 
     openFile = { cloud: false, id: path };
     return;
+}
+
+async function saveActiveNote() {
+    if (!openFile) {
+        // Create a new file here.
+        return;
+    }
+
+    const noteTitle = $('#titleField').text();
+    const noteContent = $('#editor').html();
+
+    if (openFile.cloud) {
+        // Handle cloud saving here
+    } else {
+        await window.api.invoke('save-local-file', openFile.id, noteTitle, noteContent);
+    }
 }

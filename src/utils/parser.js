@@ -99,7 +99,6 @@ export function brevToHTML(filePath) {
         }
     }
 
-    console.log(htmlToBrev())
     return { title: noteTitle, html: fullHTML };
 }
 

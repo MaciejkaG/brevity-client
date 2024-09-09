@@ -1,6 +1,6 @@
 const editor = document.getElementById('editor');
 
-editor.addEventListener('paste', function (e) {
+editor.addEventListener('paste', (e) => {
     e.preventDefault();
 
     const clipboardData = e.clipboardData || window.clipboardData;
@@ -18,7 +18,7 @@ editor.addEventListener('paste', function (e) {
             if (items[i].type.indexOf('image') !== -1) {
                 const imageFile = items[i].getAsFile();
                 const reader = new FileReader();
-                reader.onload = function (event) {
+                reader.onload = (event) => {
                     // Create an img element with the base64 encoded image
                     const img = document.createElement('img');
                     img.src = event.target.result;
@@ -29,6 +29,9 @@ editor.addEventListener('paste', function (e) {
         }
     }
 });
+
+// Prevent pasting in the title field (might change later)
+document.getElementById('noteTitle').addEventListener('paste', (e) => e.preventDefault());
 
 function insertTextAtCursor(text) {
     const selection = window.getSelection();
