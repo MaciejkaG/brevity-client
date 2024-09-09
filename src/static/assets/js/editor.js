@@ -9,8 +9,8 @@ editor.addEventListener('paste', (e) => {
     const text = clipboardData.getData('text/plain');
 
     if (text) {
-        // Insert plain text without preformatted styles
-        insertTextAtCursor(text);
+        // Insert plain text as new <div> elements
+        insertTextAsDivs(text);
     } else {
         // If there's no plain text, check for image data
         const items = clipboardData.items;
@@ -22,7 +22,7 @@ editor.addEventListener('paste', (e) => {
                     // Create an img element with the base64 encoded image
                     const img = document.createElement('img');
                     img.src = event.target.result;
-                    insertHtmlAtCursor(img.outerHTML);
+                    insertHtmlAsDiv(img.outerHTML);
                 };
                 reader.readAsDataURL(imageFile);
             }
@@ -30,33 +30,30 @@ editor.addEventListener('paste', (e) => {
     }
 });
 
-// Prevent pasting in the title field (might change later)
-document.getElementById('noteTitle').addEventListener('paste', (e) => e.preventDefault());
-
-function insertTextAtCursor(text) {
+function insertTextAsDivs(text) {
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
 
     const range = selection.getRangeAt(0);
     range.deleteContents();
 
-    // Get lines of text (split by line breaks) in reverse because they are reversed by default.
-    const lines = text.split('\n').reverse();
-    for (let i = 0; i < lines.length; i++) {
-        // Create a <div> element for the currently iterated line
+    // Get lines of text (split by line breaks)
+    const lines = text.split('\n');
+    lines.forEach(line => {
+        // Create a <div> element for each line of text
         const lineDiv = document.createElement('div');
-        lineDiv.textContent = lines[i].replaceAll(/ /g, '\u00a0');
-
+        lineDiv.textContent = line.replaceAll(/ /g, '\u00a0');
         range.insertNode(lineDiv);
-    }
+        // Move the cursor to the end of the inserted <div>
+        range.setStartAfter(lineDiv);
+        range.setEndAfter(lineDiv);
+    });
 
-    // Move the cursor to the end of the inserted text
-    range.collapse(false);
     selection.removeAllRanges();
     selection.addRange(range);
 }
 
-function insertHtmlAtCursor(html) {
+function insertHtmlAsDiv(html) {
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
     const range = selection.getRangeAt(0);
@@ -71,4 +68,13 @@ function insertHtmlAtCursor(html) {
         frag.appendChild(child);
     }
     range.insertNode(frag);
+    // Move the cursor to the end of the inserted content
+    range.setStartAfter(frag.lastChild);
+    range.setEndAfter(frag.lastChild);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
 }
+
+// Prevent pasting in the title field (might change later)
+document.getElementById('noteTitle').addEventListener('paste', (e) => e.preventDefault());

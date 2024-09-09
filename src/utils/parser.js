@@ -82,7 +82,8 @@ export function brevToHTML(filePath) {
                     break;
 
                 case 'text':
-                    fullHTML += `<span style="font-size:${elementMetadata['font-size']}rem;font-weight:${elementMetadata.weight};color:${elementMetadata.color}">${content}</span>`;
+                    // We need to add a "test" class to make converting the HTML back easier.
+                    fullHTML += `<span class="text" style="font-size:${elementMetadata['font-size']}rem;font-weight:${elementMetadata.weight};color:${elementMetadata.color}">${content}</span>`;
                     break;
 
                 case 'img':
@@ -219,18 +220,18 @@ export function htmlToBrev(title, content) {
     brevContent += `${title}\n`;
 
     // Select all elements to be parsed
-    const elements = $('h1, h2, h3, span, img');
+    const elements = $('h1, h2, h3, span.text, img');
 
     elements.each((i, elem) => {
-        const tag = elem.tagName; // Get the HTML tag
         const elementIdentifier = htmlToBrevMap[elem.tagName]; // Map the tag to a brev identifier
         let elementContent = '';
 
         // Handle spans inside text, flattening their content
         if (elem.tagName === 'span') {
-            elementContent = $(elem).text().trim();
+            // Select all text within this text block and join it
+            elementContent = $(elem).text().replace(/\s+/g, ' ').trim();
         } else {
-            elementContent = $(elem).text().trim();
+            elementContent = $(elem).text().replace(/\s+/g, ' ').trim();
         }
 
         // Handle image src
@@ -242,28 +243,32 @@ export function htmlToBrev(title, content) {
         const styleString = $(elem).attr('style') || '';
         const metadata = parseStyles(styleString, elementIdentifier);
 
-        // Convert metadata to JSON or use an empty object if none
-        const metadataString = Object.keys(metadata).length ? JSON.stringify(metadata) : '{}';
+        // Convert metadata to JSON or leave it empty if none exist
+        const metadataString = Object.keys(metadata).length ? JSON.stringify(metadata) : '';
 
         // Generate the corresponding .brev line
-        brevContent += `${elementIdentifier} ${metadataString} "${elementContent}"\n`;
+        if (metadataString) {
+            brevContent += `${elementIdentifier} ${metadataString} "${elementContent}"\n`;
+        } else {
+            brevContent += `${elementIdentifier} "${elementContent}"\n`;
+        }
     });
 
     return brevContent.trim(); // Return the final .brev content without trailing newlines
 }
 
 // Example usage
-const title = 'My Note';
-const htmlContent = `
-<div>
-  <h1 style="font-size:1.5rem;font-weight:600;color:#ff0000">My Note</h1>
-</div>
-<div>
-  <span style="font-size: 1rem; font-weight: 400; color: #000000;">The note</span>
-</div>
-<div>
-  <img style="width:5rem;" src="image.png">
-</div>`;
+// const title = 'My Note';
+// const htmlContent = `
+// <div>
+//   <h1 style="font-size:1.5rem;font-weight:600;color:#ff0000">My Note</h1>
+// </div>
+// <div>
+//   <span style="font-size: 1rem; font-weight: 400; color: #000000;">The note</span>
+// </div>
+// <div>
+//   <img style="width:5rem;" src="image.png">
+// </div>`;
 
-const brevData = htmlToBrev(title, htmlContent);
-console.log(brevData);
+// const brevData = htmlToBrev(title, htmlContent);
+// console.log(brevData);

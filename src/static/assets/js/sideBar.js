@@ -92,7 +92,9 @@ $('#noteTitle').keypress(function (e) {
         return false;
     }
 
-    if ($('#noteTitle').innerText())
+    // if ($('#noteTitle').innerText()) {
+
+    // }
 });
 
 async function openEditorLocalFile(path) {
@@ -144,12 +146,14 @@ async function saveActiveNote() {
         return;
     }
 
-    const noteTitle = $('#titleField').text();
+    const noteTitle = $('#noteTitle').html();
     const noteContent = $('#editor').html();
 
     if (openFile.cloud) {
         // Handle cloud saving here
     } else {
-        await window.api.invoke('save-local-file', openFile.id, noteTitle, noteContent);
+        // console.log({ path: openFile.id, noteTitle, noteContent });
+        const result = await window.api.invoke('save-local-file', { path: openFile.id, noteTitle, noteContent });
+        alert(result);
     }
 }

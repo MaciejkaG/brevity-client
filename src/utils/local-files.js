@@ -33,11 +33,23 @@ export function getNotes() {
     return notes;
 }
 
-// console.log(module.exports.getNoteTitles());
+export function saveLocalNote(filePath, noteTitle, noteContent) {
+    // Write the title and converted content to file.
+    try {
+        fs.writeFileSync(filePath, parser.htmlToBrev(noteTitle, noteContent), 'utf-8');
+    } catch (err) {
+        console.log(noteContent);
+        console.log(typeof noteContent);
+        console.error(err);
+        return false;
+    }
+
+    return true;
+}
 
 function getDocumentsDir() {
     // Determine the place to store Brevity files
-    const documentsDir = store.get('documentsDir') ? store.get('documentsDir') : path.join(os.homedir(), 'Documents/Brevity');
+    const documentsDir = store.get('documentsDir', path.join(os.homedir(), 'Documents/Brevity'));
 
     // Check if the notes' directory exists, if not create it.
     if (!fs.existsSync(documentsDir)) {

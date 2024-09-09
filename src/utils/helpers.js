@@ -63,7 +63,12 @@ export function handleRequests(app, mainWindow) {
         return parser.brevToHTML(path);
     });
 
-    // Handle note content request.
+    // Handle saving a local note.
+    ipcMain.handle('save-local-file', async (e, args) => {
+        return localFiles.saveLocalNote(args.path, args.noteTitle, args.noteContent);
+    });
+
+    // Open the folder picking dialogue after Brevity hasn't found the documents folder.
     ipcMain.handle('set-documents-directory', async () => {
         const result = await dialog.showOpenDialog(mainWindow, {
             title: 'Select your "documents" directory.',
