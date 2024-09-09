@@ -99,6 +99,7 @@ export function brevToHTML(filePath) {
         }
     }
 
+    console.log(htmlToBrev())
     return { title: noteTitle, html: fullHTML };
 }
 
@@ -171,3 +172,99 @@ function getFullMetadata(identifier, metadata) {
 function isColor(color) {
     return !!colorString.get(color); // returns true if valid, false if not
 }
+
+// HTML to brev conversion
+import * as cheerio from 'cheerio';
+
+// Map HTML tags to brev identifiers
+const htmlToBrevMap = {
+    'h1': 'h1',
+    'h2': 'h2',
+    'h3': 'h3',
+    'span': 'text',
+    'img': 'img',
+};
+
+// Parse styles from an element and convert to metadata
+function parseStyles(styleString, elementIdentifier) {
+    const elementAttributes = elementsAtrributes[elementIdentifier];
+    const metadata = {};
+
+    // Split the inline style string into individual styles (e.g., 'font-size: 1.5rem; color: #fff')
+    styleString.split(';').forEach(style => {
+        const [key, value] = style.split(':').map(s => s.trim());
+        const matchingAttribute = elementAttributes.find(attr => attr.name === key);
+
+        // If the style is a valid attribute for the element, add it to the metadata
+        if (matchingAttribute) {
+            if (matchingAttribute.type === 'number') {
+                metadata[key] = parseFloat(value.replace('rem', '')); // Handle numbers, remove 'rem' and convert to float
+            } else {
+                metadata[key] = value;
+            }
+        }
+    });
+
+    return metadata;
+}
+
+// Convert HTML back to brev format
+export function htmlToBrev(title, content) {
+    // Load the HTML content with cheerio
+    const $ = cheerio.load(content);
+
+    // Initialize the .brev formatted output
+    let brevContent = '';
+
+    // Add the title as the first line
+    brevContent += `${title}\n`;
+
+    // Select all elements to be parsed
+    const elements = $('h1, h2, h3, span, img');
+
+    elements.each((i, elem) => {
+        const tag = elem.tagName; // Get the HTML tag
+        const elementIdentifier = htmlToBrevMap[elem.tagName]; // Map the tag to a brev identifier
+        let elementContent = '';
+
+        // Handle spans inside text, flattening their content
+        if (elem.tagName === 'span') {
+            elementContent = $(elem).text().trim();
+        } else {
+            elementContent = $(elem).text().trim();
+        }
+
+        // Handle image src
+        if (elem.tagName === 'img') {
+            elementContent = $(elem).attr('src');
+        }
+
+        // Parse the inline style to convert to metadata (if present)
+        const styleString = $(elem).attr('style') || '';
+        const metadata = parseStyles(styleString, elementIdentifier);
+
+        // Convert metadata to JSON or use an empty object if none
+        const metadataString = Object.keys(metadata).length ? JSON.stringify(metadata) : '{}';
+
+        // Generate the corresponding .brev line
+        brevContent += `${elementIdentifier} ${metadataString} "${elementContent}"\n`;
+    });
+
+    return brevContent.trim(); // Return the final .brev content without trailing newlines
+}
+
+// Example usage
+const title = 'My Note';
+const htmlContent = `
+<div>
+  <h1 style="font-size:1.5rem;font-weight:600;color:#ff0000">My Note</h1>
+</div>
+<div>
+  <span style="font-size: 1rem; font-weight: 400; color: #000000;">The note</span>
+</div>
+<div>
+  <img style="width:5rem;" src="image.png">
+</div>`;
+
+const brevData = htmlToBrev(title, htmlContent);
+console.log(brevData);

@@ -1,4 +1,7 @@
 let sidebarActive = false;
+// openFile should be a JSON object like: { cloud: false, id: '/home/brevity-user/Documents/Brevity/my-note-09-09-2024.brev' }
+// if cloud is true, the id is a secret key for modifying and getting the note, otherwise it's the path to a file.
+let openFile = null;
 
 $(document).ready(function () {
     // Handle sidebar expanding and all animations including the note preview.
@@ -90,7 +93,7 @@ $('#noteTitle').keypress(function (e) {
     }
 });
 
-async function openEditorFile(path) {
+async function openEditorLocalFile(path) {
     const file = await getFile(path);
 
     // Insert the raw HTML content directly into the #editor div
@@ -128,4 +131,7 @@ async function openEditorFile(path) {
 
     // Trigger a click on the editor to put focus on it.
     $("#editor").click();
+
+    openFile = { cloud: false, id: path };
+    return;
 }

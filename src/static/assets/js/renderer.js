@@ -20,7 +20,7 @@ async function syncLocalFileList() {
     document.getElementById('localFilesList').innerHTML = '';
     noteList.forEach(note => {
         const escapedPath = escapeHTML(note.path).replace(/\\/g, '\\\\');
-        document.getElementById('localFilesList').innerHTML += `<span onclick="openEditorFile(\`${escapedPath}\`)">${escapeHTML(note.title)}</span>`;
+        document.getElementById('localFilesList').innerHTML += `<span onclick="openEditorLocalFile(\`${escapedPath}\`)">${escapeHTML(note.title)}</span>`;
     });
 
     if (!noteList.length) {
